@@ -1,0 +1,57 @@
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+body {
+  background-color: #f9f9f9;
+  font-family: Arial, sans-serif;
+}
+.container {
+  margin-top: 50px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+.form-group label {
+  font-weight: bold;
+}
+.form-control {
+  border-radius: 4px;
+}
+.signature-pad {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+.signature-box {
+  flex: 1;
+  margin-right: 10px;
+}
+.signature-box:last-child {
+  margin-right: 0;
+}
+.signature-pad {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
