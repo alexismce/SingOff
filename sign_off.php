@@ -3,8 +3,8 @@ header('Cache-Control: public, max-age=31536000, immutable');
 header('X-Content-Type-Options: nosniff');
 header('Content-Type: text/html; charset=utf-8');
 
-require_once 'includes/db_connect.php';
-require_once 'includes/sign_off_process.php';
+require_once 'db_connect.php';
+require_once 'sign_off_process.php';
 // Your existing code here
 ?>
 
