@@ -1,5 +1,5 @@
 <?php
-require_once 'db_connect.php';
+require_once 'db_connect.php'; // Ensure this file is included to establish a database connection
 
 // Error reporting (keep this for development, remove in production)
 ini_set('display_errors', 1);
