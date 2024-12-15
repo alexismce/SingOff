@@ -18,8 +18,10 @@ if (!$servername || !$username || !$password || !$dbname || !$port || !$flag) {
     die("Environment variables for database connection are not set.");
 }
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname, $port, $flag);
+// Create connection with SSL
+$conn = mysqli_init();
+mysqli_ssl_set($conn, NULL, NULL, "/path/to/ca-cert.pem", NULL, NULL);
+mysqli_real_connect($conn, $servername, $username, $password, $dbname, $port, MYSQLI_CLIENT_SSL);
 
 // Check connection
 if ($conn->connect_error) {
