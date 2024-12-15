@@ -10,14 +10,16 @@ $servername = getenv('DB_SERVERNAME');
 $username = getenv('DB_USERNAME');
 $password = getenv('DB_PASSWORD');
 $dbname = getenv('DB_NAME');
+$port = getenv('DB_PORT');
+$flag = getenv('DB_FLAG');
 
 // Check if environment variables are set
-if (!$servername || !$username || !$password || !$dbname) {
+if (!$servername || !$username || !$password || !$dbname || !$port || !$flag) {
     die("Environment variables for database connection are not set.");
 }
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname, $port, $flag);
 
 // Check connection
 if ($conn->connect_error) {
