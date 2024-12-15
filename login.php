@@ -10,7 +10,7 @@
 <body>
   <div class="container">
     <h2>Login</h2>
-    <form method="post" action="includes/login_process.php">
+    <form method="post" action="login_process.php">
       <div class="form-group">
         <label for="username">Username:</label>
         <input type="text" class="form-control" id="username" name="username" required autocomplete="username">
