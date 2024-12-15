@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "html2canvas": "^1.4.1",
+    "jquery": "^3.7.1",
+    "pdf-lib": "^1.17.1",
+    "pdfkit": "^0.15.1",
+    "signature_pad": "^5.0.4"
+  },
+  "devDependencies": {
+    "mocha": "^11.0.1"
+  },
+  "name": "www",
+  "version": "1.0.0",
+  "main": "createpdf.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
