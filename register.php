@@ -7,7 +7,7 @@
 <body>
   <div class="container">
     <h2>Register</h2>
-    <form method="post" action="includes/register_process.php">
+    <form method="post" action="register_process.php">
       <div class="form-group">
         <label for="username">Username:</label>
         <input type="text" class="form-control" id="username" name="username" required>
