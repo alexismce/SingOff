@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/db_connect.php';
+require_once 'db_connect.php';
 
 // Error reporting (keep this for development, remove in production)
 ini_set('display_errors', 1);
