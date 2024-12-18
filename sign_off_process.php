@@ -42,12 +42,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Prepare and bind
+    // Prepare and bind for installations
     $stmt = $conn->prepare("INSERT INTO installations (installation_date, radio_number, unit_code, x_number, radio_mobile_mid, license_plate, mileage, make, model, avl1_check, previously_installed, system_test, installation_type, installer_name, calfire_officer_name, device_data, installer_signature, calfire_signature) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssssssisssssssssss", $formData['installation_date'], $formData['radio_number'], $formData['unit_code'], $formData['x_number'], $formData['radio_mobile_mid'], $formData['license_plate'], $formData['mileage'], $formData['make'], $formData['model'], $formData['avl1_check'], $formData['previously_installed'], $formData['system_test'], $formData['installation_type'], $formData['installer_name'], $formData['calfire_officer_name'], $formData['device_data'], $formData['installer_signature'], $formData['calfire_signature']);
 
-    // Execute the query
+    // Execute the query for installations
     if ($stmt->execute()) {
+        $installation_id = $stmt->insert_id; // Get the last inserted ID for installations
+
+        // Insert device data if available
+        if ($formData['device_data']) {
+            $devices = json_decode($formData['device_data'], true);
+            if ($devices) {
+                $device_stmt = $conn->prepare("INSERT INTO installation_devices (installation_id, device_id, serial, asset, variant) VALUES (?, ?, ?, ?, ?)");
+                foreach ($devices as $device) {
+                    $device_id = getDeviceIdBySku($conn, $device['sku']);
+                    $device_stmt->bind_param("iisss", $installation_id, $device_id, $device['serial'], $device['asset'], $device['variant']);
+                    $device_stmt->execute();
+                }
+                $device_stmt->close();
+            }
+        }
+
         echo "New record created successfully";
     } else {
         echo "Error: " . $stmt->error;
@@ -58,6 +74,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conn->close();
 
     generatePDF($formData);
+}
+
+function getDeviceIdBySku($conn, $sku) {
+    $stmt = $conn->prepare("SELECT id FROM devices WHERE sku = ?");
+    $stmt->bind_param("s", $sku);
+    $stmt->execute();
+    $stmt->bind_result($device_id);
+    $stmt->fetch();
+    $stmt->close();
+    return $device_id;
 }
 
 function generatePDF($formData) {

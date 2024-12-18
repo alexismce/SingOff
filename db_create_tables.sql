@@ -72,9 +72,24 @@ CREATE TABLE installations (
 
 CREATE TABLE devices (
     id INT PRIMARY KEY IDENTITY(1,1),
-    description NVARCHAR(255) NOT NULL,
+    sku NVARCHAR(50) NOT NULL UNIQUE,
+    description NVARCHAR(255) NOT NULL
+);
+
+CREATE TABLE device_variants (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    device_id INT NOT NULL,
+    variant NVARCHAR(50) NOT NULL,
+    FOREIGN KEY (device_id) REFERENCES devices(id)
+);
+
+CREATE TABLE installation_devices (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    installation_id INT NOT NULL,
+    device_id INT NOT NULL,
     serial NVARCHAR(100) NOT NULL,
     asset NVARCHAR(100) NOT NULL,
-    installation_id INT NOT NULL,
-    FOREIGN KEY (installation_id) REFERENCES installations(id)
+    variant NVARCHAR(50),
+    FOREIGN KEY (installation_id) REFERENCES installations(id),
+    FOREIGN KEY (device_id) REFERENCES devices(id)
 );
