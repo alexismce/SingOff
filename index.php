@@ -1,18 +1,11 @@
 <?php
 require_once 'db_connect.php'; // Ensure this file is included to establish a database connection
 
-// Error reporting (keep this for development, remove in production)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-// Remove session handling and login check
-// session_start();
-// if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-//     header("Location: login.php");
-//     exit();
-// }
-?>
+session_start();
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header("Location: login.php");
+    exit();
+}
 
 <!DOCTYPE html>
 <html lang="en">
