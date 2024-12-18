@@ -1,0 +1,21 @@
+{
+  "name": "alexismce/singoff",
+  "description": "A project description",
+  "require": {
+    "php": "^7.4 || ^8.0",
+    "ext-json": "*",
+    "monolog/monolog": "^2.3", // Example dependency
+    "guzzlehttp/guzzle": "^7.3" // Example dependency
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
