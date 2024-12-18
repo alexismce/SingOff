@@ -69,3 +69,12 @@ CREATE TABLE installations (
     calfire_signature NVARCHAR(MAX),
     created_at DATETIME DEFAULT GETDATE()
 );
+
+CREATE TABLE devices (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    description NVARCHAR(255) NOT NULL,
+    serial NVARCHAR(100) NOT NULL,
+    asset NVARCHAR(100) NOT NULL,
+    installation_id INT NOT NULL,
+    FOREIGN KEY (installation_id) REFERENCES installations(id)
+);
