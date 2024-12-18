@@ -11,20 +11,16 @@ $username = getenv('DB_USERNAME');
 $password = getenv('DB_PASSWORD');
 $dbname = getenv('DB_NAME');
 $port = getenv('DB_PORT');
-$flag = getenv('DB_FLAG');
 
 // Check if environment variables are set
-if (!$servername || !$username || !$password || !$dbname || !$port || !$flag) {
+if (!$servername || !$username || !$password || !$dbname || !$port) {
     die("Environment variables for database connection are not set.");
 }
 
-// Create connection with SSL
-$conn = mysqli_init();
-mysqli_ssl_set($conn, NULL, NULL, "/path/to/ca-cert.pem", NULL, NULL);
-mysqli_real_connect($conn, $servername, $username, $password, $dbname, $port, MYSQLI_CLIENT_SSL);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error . " (" . $conn->connect_errno . ")");
+try {
+    $conn = new PDO("sqlsrv:server = tcp:$servername,$port; Database = $dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Error connecting to SQL Server: " . $e->getMessage());
 }
 ?>
