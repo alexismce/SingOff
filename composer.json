@@ -4,8 +4,8 @@
   "require": {
     "php": "^7.4 || ^8.0",
     "ext-json": "*",
-    "monolog/monolog": "^2.3", // Example dependency
-    "guzzlehttp/guzzle": "^7.3" // Example dependency
+    "monolog/monolog": "^2.3",
+    "guzzlehttp/guzzle": "^7.3"
   },
   "autoload": {
     "psr-4": {
