@@ -36,6 +36,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'calfire_signature' => $_POST['calfire_signature']
     ];
 
+    // Database connection
+    $conn = new mysqli('localhost', 'username', 'password', 'database');
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Prepare and bind
+    $stmt = $conn->prepare("INSERT INTO installations (installation_date, radio_number, unit_code, x_number, radio_mobile_mid, license_plate, mileage, make, model, avl1_check, previously_installed, system_test, installation_type, installer_name, calfire_officer_name, device_data, installer_signature, calfire_signature) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssssisssssssssss", $formData['installation_date'], $formData['radio_number'], $formData['unit_code'], $formData['x_number'], $formData['radio_mobile_mid'], $formData['license_plate'], $formData['mileage'], $formData['make'], $formData['model'], $formData['avl1_check'], $formData['previously_installed'], $formData['system_test'], $formData['installation_type'], $formData['installer_name'], $formData['calfire_officer_name'], $formData['device_data'], $formData['installer_signature'], $formData['calfire_signature']);
+
+    // Execute the query
+    if ($stmt->execute()) {
+        echo "New record created successfully";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    // Close the statement and connection
+    $stmt->close();
+    $conn->close();
+
     generatePDF($formData);
 }
 

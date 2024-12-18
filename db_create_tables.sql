@@ -46,3 +46,26 @@ CREATE TABLE tracking (
     status NVARCHAR(50),
     updated_at DATETIME DEFAULT GETDATE()
 );
+
+CREATE TABLE installations (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    installation_date DATE NOT NULL,
+    radio_number NVARCHAR(50) NOT NULL,
+    unit_code NVARCHAR(50) NOT NULL,
+    x_number NVARCHAR(50) NOT NULL,
+    radio_mobile_mid NVARCHAR(50) NOT NULL,
+    license_plate NVARCHAR(50) NOT NULL,
+    mileage INT NOT NULL,
+    make NVARCHAR(50) NOT NULL,
+    model NVARCHAR(50) NOT NULL,
+    avl1_check NVARCHAR(50) NOT NULL,
+    previously_installed NVARCHAR(MAX),
+    system_test NVARCHAR(50) NOT NULL,
+    installation_type NVARCHAR(50) NOT NULL,
+    installer_name NVARCHAR(100) NOT NULL,
+    calfire_officer_name NVARCHAR(100) NOT NULL,
+    device_data NVARCHAR(MAX),
+    installer_signature NVARCHAR(MAX),
+    calfire_signature NVARCHAR(MAX),
+    created_at DATETIME DEFAULT GETDATE()
+);
