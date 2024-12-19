@@ -27,8 +27,6 @@
     "signature_pad": "^5.0.4",
     "jspdf": "^2.5.1",
     "canvas": "^2.8.0",
-    "new-dependency": "^1.0.0",
-    "new-npm-dependency": "^1.0.0",
     "jquery-validation": "^1.19.3",
     "axios": "^0.21.1",
     "chart.js": "^3.5.1",
