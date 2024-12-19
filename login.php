@@ -1,9 +1,10 @@
 <?php
 session_start();
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header("Location: login.php");
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+    header("Location: dashboard.php"); // Redirect to a different page after login
     exit();
 }
+?>
 
 
 <!DOCTYPE html>
@@ -37,3 +38,4 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
   </script>
 </body>
 </html>
+?>

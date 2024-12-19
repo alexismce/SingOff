@@ -4,7 +4,8 @@
   "description": "A website to manage the CalFire project",
   "scripts": {
     "start": "php -S localhost:8000",
-    "build": "echo 'Building the project...'"
+    "build": "echo 'Building the project...'",
+    "deploy": "echo 'Deploying the project...'"
   },
   "directories": {
     "lib": "lib",
