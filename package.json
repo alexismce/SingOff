@@ -1,4 +1,23 @@
 {
+  "name": "calfire",
+  "version": "1.0.0",
+  "description": "A website to manage the CalFire project",
+  "scripts": {
+    "start": "php -S localhost:8000",
+    "build": "echo 'Building the project...'"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "tests",
+    "includes": "includes",
+    "js": "js",
+    "logs": "logs",
+    "temp": "temp",
+    "users": "users",
+    "vendor": "vendor",
+    "txt": "txt",
+    "css": "css"
+  },
   "dependencies": {
     "bootstrap": "^5.3.3",
     "html2canvas": "^1.4.1",
@@ -6,27 +25,20 @@
     "pdf-lib": "^1.17.1",
     "pdfkit": "^0.15.1",
     "signature_pad": "^5.0.4",
-    "new-dependency": "^1.0.0",
     "jspdf": "^2.5.1",
     "pdfmake": "^0.2.4",
     "canvas": "^2.8.0",
-    "new-npm-dependency": "^1.0.0"
+    "new-dependency": "^1.0.0",
+    "new-npm-dependency": "^1.0.0",
+    "jquery-validation": "^1.19.3",
+    "axios": "^0.21.1",
+    "chart.js": "^3.5.1",
+    "moment": "^2.29.1"
   },
   "devDependencies": {
     "mocha": "^11.0.1"
   },
-  "name": "www",
-  "version": "1.0.0",
-  "main": "createpdf.js",
-  "directories": {
-    "lib": "lib",
-    "test": "tests"
-  },
-  "scripts": {
-    "test": "mocha"
-  },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "author": "Derek Crease",
+  "license": "ISC"
 }
