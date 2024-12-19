@@ -26,7 +26,6 @@
     "pdfkit": "^0.15.1",
     "signature_pad": "^5.0.4",
     "jspdf": "^2.5.1",
-    "pdfmake": "^0.2.4",
     "canvas": "^2.8.0",
     "new-dependency": "^1.0.0",
     "new-npm-dependency": "^1.0.0",
