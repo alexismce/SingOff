@@ -57,7 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $device_stmt = $conn->prepare("INSERT INTO installation_devices (installation_id, device_id, serial, asset, variant) VALUES (?, ?, ?, ?, ?)");
                 foreach ($devices as $device) {
                     $device_id = getDeviceIdBySku($conn, $device['sku']);
-                    $device_stmt->bind_param("iisss", $installation_id, $device_id, $device['serial'], $device['asset'], $device['variant']);
+                    if ($device_id !== null) { //check if device_id is not null
+                        $device_stmt->bind_param("iisss", $installation_id, $device_id, $device['serial'], $device['asset'], $device['variant']);
+                    }
                     $device_stmt->execute();
                 }
                 $device_stmt->close();
@@ -80,9 +82,12 @@ function getDeviceIdBySku($conn, $sku) {
     $stmt = $conn->prepare("SELECT id FROM devices WHERE sku = ?");
     $stmt->bind_param("s", $sku);
     $stmt->execute();
-    $stmt->bind_result($device_id);
-    $stmt->fetch();
-    $stmt->close();
+    $result = $stmt->get_result();
+    $device_id = null;
+    if ($row = $result->fetch_assoc()) {
+        $device_id = $row['id'];
+    }
+    $stmt->close();    
     return $device_id;
 }
 
