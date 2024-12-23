@@ -29,10 +29,13 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
       <button type="submit" class="btn btn-primary">Login</button>
     </form>
   </div>
-  <script>
-    window.addEventListener('beforeunload', function(event) {
-        // Your code here
-    });
-  </script>
+<script>
+  window.addEventListener('beforeunload', function(event) {
+    // Display a warning message to the user
+    event.preventDefault(); // For modern browsers
+    event.returnValue = ''; // For older browsers
+  });
+</script>
+
 </body>
 </html>
