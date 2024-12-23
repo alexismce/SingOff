@@ -1,5 +1,5 @@
 {
-  "name": "calfire",
+  "name": "signoff",
   "version": "1.0.0",
   "description": "A website to manage the Installation Sign Off project",
   "scripts": {
@@ -37,7 +37,7 @@
   "devDependencies": {
     "mocha": "^11.0.1"
   },
-  "keywords": ["calfire", "project", "management", "website"],
+  "keywords": ["signoff", "project", "management", "website"],
   "author": "Alexis Felix",
   "license": "ISC",
   "engines": {
