@@ -1,13 +1,12 @@
 <?php
-require_once 'db_connect.php'; // Ensure this file is included to establish a database connection
+require_once 'includes/db_connect.php'; // Include for DB connection
 
 session_start();
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header("Location: login.php");
+    header("Location: login.php"); // Redirect if not logged in
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,15 +14,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Internal System Home</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .container {
-            margin-top: 50px;
-        }
-        .card {
-            margin: 20px;
-            padding: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
@@ -35,7 +26,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <div class="card">
                     <h3 class="card-title">Sign-Off Process</h3>
                     <p>Complete the sign-off process for installations.</p>
-                    <a href="sign_off.php" class="btn btn-primary">Go to Sign-Off</a>
+                    <a href="includes/sign_off.php" class="btn btn-primary">Go to Sign-Off</a>
                 </div>
             </div>
             <!-- Inventory Update -->
@@ -43,7 +34,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <div class="card">
                     <h3 class="card-title">Inventory Update</h3>
                     <p>Update the inventory with new devices.</p>
-                    <a href="inventory_update.php" class="btn btn-primary">Go to Inventory</a>
+                    <a href="includes/inventory_update.php" class="btn btn-primary">Go to Inventory</a>
                 </div>
             </div>
             <!-- Provisioning Devices -->
@@ -51,7 +42,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <div class="card">
                     <h3 class="card-title">Provisioning Devices</h3>
                     <p>Provision devices for installation and testing.</p>
-                    <a href="provisioning.php" class="btn btn-primary">Go to Provisioning</a>
+                    <a href="includes/provisioning.php" class="btn btn-primary">Go to Provisioning</a>
                 </div>
             </div>
         </div>
@@ -61,7 +52,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <div class="card">
                     <h3 class="card-title">Device Testing</h3>
                     <p>Perform testing on the devices.</p>
-                    <a href="testing.php" class="btn btn-primary">Go to Testing</a>
+                    <a href="includes/testing.php" class="btn btn-primary">Go to Testing</a>
                 </div>
             </div>
             <!-- Track Shipping & Installations -->
@@ -69,7 +60,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <div class="card">
                     <h3 class="card-title">Track Shipping & Installations</h3>
                     <p>Track the status of shipping and installations.</p>
-                    <a href="tracking.php" class="btn btn-primary">Go to Tracking</a>
+                    <a href="includes/tracking.php" class="btn btn-primary">Go to Tracking</a>
                 </div>
             </div>
             <!-- Logout -->
@@ -77,7 +68,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                 <div class="card">
                     <h3 class="card-title">Logout</h3>
                     <p>Log out of the internal system.</p>
-                    <a href="logout.php" class="btn btn-danger">Logout</a>
+                    <a href="includes/logout.php" class="btn btn-danger">Logout</a>
                 </div>
             </div>
         </div>

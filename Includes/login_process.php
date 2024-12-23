@@ -6,9 +6,20 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Load environment variables
+require_once '../vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
+// Fetch environment variables
+$servername = getenv('DB_SERVERNAME');
+$dbusername = getenv('DB_USERNAME');
+$dbpassword = getenv('DB_PASSWORD');
+$dbname = getenv('DB_NAME');
+
 // PHP Data Objects(PDO) Sample Code:
 try {
-    $conn = new PDO("sqlsrv:server = tcp:alexisserver.database.windows.net,1433; Database = calfire_installs", "alexismce", "{your_password_here}");
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $dbusername, $dbpassword);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     die("Error connecting to SQL Server: " . $e->getMessage());
@@ -29,13 +40,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Verify the password
         if (password_verify($password, $hashed_password)) {
-            // Start a session and set session variables
+            // Set session variables
             $_SESSION['logged_in'] = true;
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['username'] = $username;
 
             // Redirect to the index page
-            header("Location: index.php");
+            header("Location: ../index.php");
             exit();
         } else {
             // Invalid password

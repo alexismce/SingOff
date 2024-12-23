@@ -1,12 +1,10 @@
 <?php
 session_start();
 if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-    header("Location: dashboard.php"); // Redirect to a different page after login
+    header("Location: index.php"); // Redirect to the main page (index.php)
     exit();
 }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,12 +12,12 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css?v=1.0"> <!-- Cache busting -->
-  <link rel="stylesheet" href="css/style.css?v=1.0"> <!-- Cache busting -->
+  <link rel="stylesheet" href="css/style.css?v=1.0"> <!-- Cache busting, adjusted path -->
 </head>
 <body>
   <div class="container">
     <h2>Login</h2>
-    <form method="post" action="login_process.php">
+    <form method="post" action="includes/login_process.php"> <!-- Corrected action path -->
       <div class="form-group">
         <label for="username">Username:</label>
         <input type="text" class="form-control" id="username" name="username" required autocomplete="username">
@@ -38,4 +36,3 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
   </script>
 </body>
 </html>
-?>
