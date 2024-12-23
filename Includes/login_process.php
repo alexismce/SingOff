@@ -8,7 +8,9 @@ error_reporting(E_ALL);
 
 // Load environment variables
 require_once '../vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+use Dotenv\Dotenv; // Ensure namespace is imported correctly
+
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
 // Fetch environment variables

@@ -3,12 +3,6 @@
 // Ensure the path to the Composer autoload file is correct
 require_once '../vendor/autoload.php';
 
-function base64_to_image($base64_string) {
-    // Remove data URI scheme prefix
-    $base64_string = str_replace('data:image/png;base64,', '', $base64_string);
-    return base64_decode($base64_string);
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $formData = [
         'installation_date' => $_POST['date'],
@@ -30,6 +24,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'installer_signature' => $_POST['installer_signature_data'],
         'calfire_signature' => $_POST['calfire_signature_data']
     ];
+
+    // Handle signatures
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'http://your-domain.com/handle_signatures.php');
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($_POST));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $signatureData = json_decode($response, true);
+
+    $formData['installer_signature'] = isset($signatureData['installer_signature']) ? $signatureData['installer_signature'] : null;
+    $formData['calfire_signature'] = isset($signatureData['calfire_signature']) ? $signatureData['calfire_signature'] : null;
 
     // Database connection
     $conn = new mysqli('localhost', 'username', 'password', 'database');
@@ -88,7 +96,7 @@ function getDeviceIdBySku($conn, $sku) {
 
 function generatePDF($formData) {
     // Redirect to the PDF generation script with form data
-    header('Location: generate_pdf.php?' . http_build_query($formData));
+    header('Location: pdf_generation.php?' . http_build_query($formData));
     exit();
 }
 ?>

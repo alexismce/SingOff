@@ -1,12 +1,17 @@
-name: CI/CD
+name: CalFire Project CI/CD
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -14,13 +19,20 @@ jobs:
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.2'
+        php-version: 8.2
+        extensions: pdo_sqlsrv, sqlsrv, json, mbstring, zip, xml
 
-    - name: Install PHP dependencies
-      run: composer install
+    - name: Validate composer.json and composer.lock
+      run: composer validate
 
-    - name: Run PHP tests
-      run: phpunit
+    - name: Install Composer dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest
+
+    - name: Run PHP Lint
+      run: find . -type f -name "*.php" -exec php -l {} \;
+
+    - name: Run PHP Unit Tests
+      run: vendor/bin/phpunit
 
     - name: Set up Node.js
       uses: actions/setup-node@v2
@@ -33,5 +45,39 @@ jobs:
     - name: Run JavaScript tests
       run: npm test
 
-    - name: Deploy
-      run: npm run deploy
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.2
+        extensions: pdo_sqlsrv, sqlsrv, json, mbstring, zip, xml
+
+    - name: Install Composer dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest
+
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install Node.js dependencies
+      run: npm install
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'your-azure-app-service-name'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+
+    - name: Restart Azure Web App
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          az webapp restart --name 'your-azure-app-service-name' --resource-group 'your-resource-group'
