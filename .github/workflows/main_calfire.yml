@@ -51,6 +51,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
 
+    env:
+      AZURE_LOGIN_PRE_CLEANUP: true
+      AZURE_LOGIN_POST_CLEANUP: false
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
