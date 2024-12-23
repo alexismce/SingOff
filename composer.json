@@ -3,11 +3,12 @@
   "description": "A website to manage the CalFire project",
   "type": "project",
   "require": {
-    "php": "^7.4 || ^8.0",
+    "php": "^7.4 || ^8.0 || ^8.2",
     "ext-pdo": "*",
     "ext-json": "*",
     "monolog/monolog": "^2.0",
-    "guzzlehttp/guzzle": "^7.0"
+    "guzzlehttp/guzzle": "^7.0",
+    "tecnickcom/tcpdf": "^6.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0"
@@ -28,3 +29,4 @@
   ],
   "license": "ISC"
 }
+
