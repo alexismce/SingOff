@@ -1,9 +1,9 @@
 <?php
-require_once 'includes/db_connect.php'; // Include for DB connection
+require_once 'includes/db_connect.php'; // Ensure this file is included to establish a database connection
 
 session_start();
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header("Location: login.php"); // Redirect if not logged in
+    header("Location: login.php"); // Redirect to login if not logged in
     exit();
 }
 ?>
@@ -18,8 +18,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     <link rel="stylesheet" href="css/style.css"> <!-- Adjusted path -->
 </head>
 <body>
-    <div class="container">
-        <h2>Equipment Installation Form</h2>
+    <div class="container mt-5">
+        <h2 class="text-center">Equipment Installation Form</h2>
         <form method="post" action="includes/handle_form.php"> <!-- Adjusted path for form handling -->
             <div class="form-row">
                 <div class="form-group col-md-4">
@@ -114,19 +114,23 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
                     <option value="type5">5</option>
                 </select>
             </div>
-            <table class="table table-striped hide-sku">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Item</th>
-                        <th>Description</th>
-                        <th>Options</th>
-                        <th>Serial Number</th>
-                        <th>Asset Tag</th>
-                    </tr>
-                </thead>
-                <tbody id="deviceTableBody"></tbody>
-            </table>
+            <div class="form-group">
+                <label for="deviceTableBody">Devices</label>
+                <table class="table table-striped hide-sku">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Item</th>
+                            <th>Description</th>
+                            <th>Options</th>
+                            <th>Serial Number</th>
+                            <th>Asset Tag</th>
+                        </tr>
+                    </thead>
+                    <tbody id="deviceTableBody"></tbody>
+                </table>
+                <button type="button" id="addDeviceRow" class="btn btn-secondary">Add Device</button>
+            </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="installer_name">Installer Name:</label>
@@ -154,7 +158,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
             <input type="hidden" name="installer_signature" id="installer_signature">
             <input type="hidden" name="calfire_signature" id="calfire_signature">
             <input type="hidden" name="device_data" id="device_data">
-            <div class="button-group">
+            <div class="text-center">
                 <button type="button" id="clear" class="btn btn-secondary">Clear</button>
                 <button type="submit" class="btn btn-primary">Submit</button>
                 <button type="button" id="generatePdf" class="btn btn-info">Generate PDF</button>
