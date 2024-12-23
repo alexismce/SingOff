@@ -9,7 +9,7 @@
     "monolog/monolog": "^2.0",
     "guzzlehttp/guzzle": "^7.0",
     "vlucas/phpdotenv": "^5.0",
-    "tecnickcom/tcpdf": "^6.7",
+    "tecnickcom/tcpdf": "^6.8",
     "nette/forms": "^3.2",
     "doctrine/dbal": "^4.2"
   },
