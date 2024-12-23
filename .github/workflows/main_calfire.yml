@@ -1,4 +1,4 @@
-name: CalFire Project CI/CD
+name: SignOff Project CI/CD
 
 on:
   push:
