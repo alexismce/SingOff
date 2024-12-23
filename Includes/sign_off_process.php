@@ -78,6 +78,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     generatePDF($formData);
 }
 
+/**
+ * @param mixed $conn 
+ * @param mixed $sku 
+ * @return mixed 
+ */
 function getDeviceIdBySku($conn, $sku) {
     $stmt = $conn->prepare("SELECT id FROM devices WHERE sku = ?");
     $stmt->bind_param("s", $sku);
@@ -91,105 +96,72 @@ function getDeviceIdBySku($conn, $sku) {
     return $device_id;
 }
 
+/**
+ * @param mixed $formData 
+ * @return void 
+ */
 function generatePDF($formData) {
-    // Ensure the path to the TCPDF library is correct
-    require_once '../vendor/tcpdf/tcpdf.php';
+    require_once '../vendor/autoload.php';
 
-    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-    $pdf->SetCreator(PDF_CREATOR);
+    // Add this line to use the TCPDF namespace
+    use TCPDF;
+    $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+    $pdf->SetCreator('Your Application Name');
     $pdf->SetAuthor('Alexis Felix');
     $pdf->SetTitle('Installation Form');
     $pdf->SetSubject('Installation Form Details');
     $pdf->SetKeywords('TCPDF, PDF, installation, form');
 
-    $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-    $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+    $pdf->setHeaderFont(Array('helvetica', '', 12));
+    $pdf->setFooterFont(Array('helvetica', '', 10));
 
-    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-    $pdf->SetMargins(PDF_MARGIN_LEFT, 10, PDF_MARGIN_RIGHT); // Adjust the top margin to 10
-    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-    $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+    $pdf->SetDefaultMonospacedFont('courier');
+    $pdf->SetMargins(15, 10, 15);
+    $pdf->SetHeaderMargin(5);
+    $pdf->SetFooterMargin(10);
+    $pdf->SetAutoPageBreak(TRUE, 25);
+    $pdf->setImageScale(1.25);
 
     $pdf->AddPage();
 
     $pdf->SetFont('helvetica', '', 12);
 
-    $html = '<h1>Installation Form Details</h1>';
-    $html .= '<p><strong>Date:</strong> ' . htmlspecialchars($formData['installation_date']) . '</p>';
-    $html .= '<table border="1" cellpadding="3">
-                <tr>
-                    <td><strong>Radio Number:</strong> ' . htmlspecialchars($formData['radio_number']) . '</td>
-                    <td><strong>Unit Code:</strong> ' . htmlspecialchars($formData['unit_code']) . '</td>
-                    <td><strong>X Number:</strong> ' . htmlspecialchars($formData['x_number']) . '</td>
-                </tr>
-                <tr>
-                    <td><strong>Radio Mobile MID:</strong> ' . htmlspecialchars($formData['radio_mobile_mid']) . '</td>
-                    <td><strong>License Plate:</strong> ' . htmlspecialchars($formData['license_plate']) . '</td>
-                    <td><strong>Mileage:</strong> ' . htmlspecialchars($formData['mileage']) . '</td>
-                </tr>
-                <tr>
-                    <td><strong>Make:</strong> ' . htmlspecialchars($formData['make']) . '</td>
-                    <td><strong>Model:</strong> ' . htmlspecialchars($formData['model']) . '</td>
-                </tr>
-                <tr>
-                    <td colspan="3"><strong>Installation Type:</strong> ' . htmlspecialchars($formData['installation_type']) . '</td>
-                </tr>
-              </table>';
-    $html .= '<p><strong>Was this equipment an AVL 1.0?:</strong> ' . htmlspecialchars($formData['avl1_check']) . '</p>';
-    $html .= '<p><strong>Previously Installed Equipment (optional description):</strong> ' . htmlspecialchars($formData['previously_installed']) . '</p>';
-    $html .= '<p><strong>System Test and Approval:</strong> ' . htmlspecialchars($formData['system_test']) . '</p>';
+    // Add your PDF content generation logic here
 
-    // Assuming device data is an array of arrays
-    if ($formData['device_data']) {
-        $devices = json_decode($formData['device_data'], true);
-        if ($devices) {
-            $html .= '<h2>Devices</h2>';
-            $html .= '<table border="1" cellpadding="5"><tr><th style="width: 5%;">#</th><th style="width: 40%;">Description</th><th>Serial Number</th><th>Asset Tag</th></tr>';
-            foreach ($devices as $index => $device) {
-                $html .= '<tr><td style="width: 5%;">' . ($index + 1) . '</td><td style="width: 40%;">' . htmlspecialchars($device['description']) . '</td><td>' . htmlspecialchars($device['serial']) . '</td><td>' . htmlspecialchars($device['asset']) . '</td></tr>';
-            }
-            $html .= '</table>';
-        } else {
-            $html .= '<p>No devices found.</p>';
-        }
-    } else {
-        $html .= '<p>Device data not received.</p>';
-    }
-
-    // Add signatures
-    $html .= '<h2>Signatures</h2>';    
-    $html .= '<table border="0" cellpadding="5">';
-    $html .= '<tr>';
-    $html .= '<td width="50%">';
-    if (!empty($formData['installer_signature'])) {
-        $img_data = base64_to_image($formData['installer_signature']);
-        $pdf->Image('@' . $img_data, 15, 160, 0, 0, 'PNG');
-    }
-    $html .= '</td>';
-    $html .= '<td width="50%">';
-    if (!empty($formData['calfire_signature'])) {
-        $img_data = base64_to_image($formData['calfire_signature']);
-        $pdf->Image('@' . $img_data, 15, 160, 0, 0, 'PNG');
-    }
-    $html .= '</td>';
-    $html .= '</tr>';
-    $html .= '<tr>';
-    $html .= '<td width="50%" align="center"><strong>Installer:</strong> ' . htmlspecialchars($formData['installer_name']) . '</td>';
-    $html .= '<td width="50%" align="center"><strong>CalFire Officer:</strong> ' . htmlspecialchars($formData['calfire_officer_name']) . '</td>';
-    $html .= '</tr>';
-    $html .= '</table>';
-
-    // Write HTML content
-    $pdf->writeHTML($html, true, false, true, false, '');
-
-    // End output buffering and clean it
-    ob_end_clean();
-    
-    // Output PDF
-    $pdf->Output('installation_form.pdf', 'I');
+    // Output the PDF
+    $pdf->Output('installation_form.pdf', 'F');
 }
+
+function generatePDF($formData) {
+    require_once '../vendor/autoload.php';
+
+    $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+    $pdf->SetCreator('Your Application Name');
+    $pdf->SetAuthor('Alexis Felix');
+    $pdf->SetTitle('Installation Form');
+    $pdf->SetSubject('Installation Form Details');
+    $pdf->SetKeywords('TCPDF, PDF, installation, form');
+
+    $pdf->setHeaderFont(Array('helvetica', '', 12));
+    $pdf->setFooterFont(Array('helvetica', '', 10));
+
+    $pdf->SetDefaultMonospacedFont('courier');
+    $pdf->SetMargins(15, 10, 15);
+    $pdf->SetHeaderMargin(5);
+    $pdf->SetFooterMargin(10);
+    $pdf->SetAutoPageBreak(TRUE, 25);
+    $pdf->setImageScale(1.25);
+
+    $pdf->AddPage();
+
+    $pdf->SetFont('helvetica', '', 12);
+
+    // Add your PDF content generation logic here
+
+    // Output the PDF
+    $pdf->Output('installation_form.pdf', 'F');
+}
+
 ?>
 
 

@@ -32,14 +32,4 @@
 			"**/vendor": true
 		}
 	},
-	"extensions": {
-		"recommendations": [
-			"bmewburn.vscode-intelephense-client",
-			"felixfbecker.php-intellisense",
-			"ikappas.phpcs",
-			"junstyle.php-cs-fixer",
-			"mehedidracula.php-namespace-resolver",
-			"neilbrayfield.php-docblocker"
-		]
-	}
 }
