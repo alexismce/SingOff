@@ -67,10 +67,7 @@ jobs:
     - name: Log in to Azure
       uses: azure/login@v2
       with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
         allow-no-subscriptions: true
         enable-AzPSSession: true
 
@@ -78,7 +75,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'calfire'
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F16ACB058F5A4839A9FD6FB4A90A3A44 }}
 
     - name: Restart Azure Web App
       uses: azure/CLI@v1
