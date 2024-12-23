@@ -71,11 +71,11 @@ jobs:
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'your-azure-app-service-name'
+        app-name: 'calfire'
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
 
     - name: Restart Azure Web App
       uses: azure/CLI@v1
       with:
         inlineScript: |
-          az webapp restart --name 'your-azure-app-service-name' --resource-group 'your-resource-group'
+          az webapp restart --name 'calfire' --resource-group 'your-resource-group'
