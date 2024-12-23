@@ -1,6 +1,6 @@
 {
   "name": "signoff/signoff",
-  "description": "A website to manage the SignOff project",
+  "description": "A website to manage the Installation Sign Off project",
   "type": "project",
   "require": {
     "php": "^7.4 || ^8.0 || ^8.2",
@@ -8,7 +8,6 @@
     "ext-json": "*",
     "monolog/monolog": "^2.0",
     "guzzlehttp/guzzle": "^7.0",
-    "tecnickcom/tcpdf": "^6.0",
     "vlucas/phpdotenv": "^5.0"
   },
   "require-dev": {
