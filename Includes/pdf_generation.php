@@ -57,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $installer_data = base64_decode($installer_signature);
         $pdf->Image('@' . $installer_data, 15, 240, 50, 25, 'PNG');
         $pdf->Cell(0, 10, "Installer Signature:", 0, 1);
-        $pdf->Image('@' . $installer_data, '', '', 50, 25, 'PNG');
     }
 
     if (isset($_POST['calfire_signature'])) {
@@ -67,7 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $calfire_data = base64_decode($calfire_signature);
         $pdf->Image('@' . $calfire_data, 15, 270, 50, 25, 'PNG');
         $pdf->Cell(0, 10, "CalFire Officer Signature:", 0, 1);
-        $pdf->Image('@' . $calfire_data, '', '', 50, 25, 'PNG');
     }
 
     // Output the PDF

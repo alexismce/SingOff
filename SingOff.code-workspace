@@ -1,0 +1,45 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/CVS": true,
+			"**/.DS_Store": true,
+			"**/node_modules": true,
+			"**/bower_components": true,
+			"**/vendor": true
+		},
+		"files.watcherExclude": {
+			"**/.git/**": true,
+			"**/node_modules/**": true,
+			"**/bower_components/**": true,
+			"**/vendor/**": true
+		},
+		"php.validate.executablePath": "/usr/local/bin/php",
+		"php.validate.run": "onType",
+		"editor.formatOnSave": true,
+		"editor.tabSize": 2,
+		"editor.insertSpaces": true,
+		"search.exclude": {
+			"**/node_modules": true,
+			"**/bower_components": true,
+			"**/vendor": true
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"bmewburn.vscode-intelephense-client",
+			"felixfbecker.php-intellisense",
+			"ikappas.phpcs",
+			"junstyle.php-cs-fixer",
+			"mehedidracula.php-namespace-resolver",
+			"neilbrayfield.php-docblocker"
+		]
+	}
+}
