@@ -1,7 +1,7 @@
 {
   "name": "calfire",
   "version": "1.0.0",
-  "description": "A website to manage the CalFire project",
+  "description": "A website to manage the Installation Sign Off project",
   "scripts": {
     "start": "php -S localhost:8000",
     "build": "echo 'Building the project...'",
