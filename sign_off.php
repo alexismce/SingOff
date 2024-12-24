@@ -1,12 +1,12 @@
 <?php
-require_once 'includes/db_connect.php'; // Ensure this file is included to establish a database connection
-
 session_start();
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header("Location: login.php"); // Redirect to login if not logged in
-    exit();
-}
+// Assuming login credentials are correct
+$_SESSION['logged_in'] = true;
+// Redirect to index.php
+header("Location: index.php");
+exit();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
