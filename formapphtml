@@ -1,0 +1,613 @@
+<?php require_once 'db_connect.php'; 
+// Ensure this file is included to establish a database connection session_start(
+); if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) { header("Location: login.php");
+exit(); } ?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <title>Equipment Installation Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.5/dist/signature_pad.umd.min.js"></script>
+    <style>
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            border-radius: 4px;
+        }
+
+        .signature-pad {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+        .signature-box {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .signature-box:last-child {
+            margin-right: 0;
+        }
+
+        .signature-pad {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .custom-checkbox {
+            width: 20px;
+            /* Control the size */
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .custom-checkbox {
+            background-color: #007bff;
+            /* Change to your preferred color */
+            border-radius: 3px;
+        }
+
+        /* New way using Forced Colors Mode */
+        @media (forced-colors: active) {
+            body {
+                background-color: Canvas;
+                color: CanvasText;
+            }
+        }
+
+        /* Hide SKU column */
+        .hide-sku th:nth-child(2),
+        .hide-sku td:nth-child(2) {
+            display: none;
+        }
+
+        /* Style for the table in the PDF */
+        .pdf-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .pdf-table th,
+        .pdf-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .pdf-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Equipment Installation Form</h2>
+        <form id="equipmentForm">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="date">Date</label>
+                    <input type="date" class="form-control" id="date" name="date" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="radio_number">RADIO #/VEHICLE Name</label>
+                    <input type="text" class="form-control" id="radio_number" name="radio_number" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="cal_fire_unit_code">UNIT Code</label>
+                    <input type="text" class="form-control" id="cal_fire_unit_code" name="cal_fire_unit_code"
+                        required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="x_number">X-Number</label>
+                    <input type="text" class="form-control" id="x_number" name="x_number"
+                        placeholder="e.g., 12 X 345" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="radio_mobile_mid">Radio Mobile MID</label>
+                    <input type="text" class="form-control" id="radio_mobile_mid" name="radio_mobile_mid">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="license_plate">License Plate #</label>
+                    <input type="text" class="form-control" id="license_plate" name="license_plate" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="mileage">Mileage</label>
+                    <input type="number" class="form-control" id="mileage" name="mileage" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="make">Make</label>
+                    <input type="text" class="form-control" id="make" name="make">
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="model">Model</label>
+                    <input type="text" class="form-control" id="model" name="model">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="avl1_check">Was this equipment an AVL 1.0?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="avl1_yes" name="avl1_check" value="yes">
+                    <label class="form-check-label" for="avl1_yes">Yes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="avl1_no" name="avl1_check" value="no">
+                    <label class="form-check-label" for="avl1_no">No</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="previously_installed">Previously Installed Equipment (optional description)</label>
+                <input type="text" class="form-control" id="previously_installed" name="previously_installed"
+                    placeholder="Description">
+            </div>
+            <div class="form-group">
+                <label>System Test and Approval</label>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Yes/No</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MDT, Cell, RF and Satellite tested successfully</td>
+                            <td>
+                                <select class="form-control" name="system_test" aria-label="System Test" required>
+                                    <option value="" disabled selected>Select Yes/No</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                <label for="installationType">Installation Type:</label>
+                <select class="form-control" id="installationType" name="installationType" required>
+                    <option value="">Select Installation Type</option>
+                    <option value="type1">1</option>
+                    <option value="type2">2</option>
+                    <option value="type3">3</option>
+                    <option value="type4">4</option>
+                    <option value="type5">5</option>
+                </select>
+            </div>
+
+            <table class="table table-striped hide-sku">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Item</th>
+                        <th>Description</th>
+                        <th>Options</th>
+                        <th>Serial Number</th>
+                        <th>Asset Tag</th>
+                    </tr>
+                </thead>
+                <tbody id="deviceTableBody"></tbody>
+            </table>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="installer_name">Installer Name:</label>
+                    <input type="text" class="form-control" id="installer_name" name="installer_name" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="calfire_officer_name">CalFire Officer Name:</label>
+                    <input type="text" class="form-control" id="calfire_officer_name"
+                        name="calfire_officer_name" required>
+                </div>
+            </div>
+            </thead>
+            </table>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="installer-signature-pad">Installer Signature:</label>
+                    <div class="signature-container">
+                        <canvas id="installer-signature-pad" class="signature-pad" width="450" height="200"></canvas>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="calfire-signature-pad">CalFire Officer Signature:</label>
+                    <div class="signature-container">
+                        <canvas id="calfire-signature-pad" class="signature-pad" width="450" height="200"></canvas>
+                    </div>
+                </div>
+
+                <input type="hidden" name="device_data" id="device_data">
+            </div>
+
+            <div class="button-group">
+                <button type="button" id="clear" class="btn btn-secondary">Clear</button>
+                <button type="submit" class="btn btn-info">Generate PDF</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const installerCanvas = document.getElementById('installer-signature-pad');
+            const calfireCanvas = document.getElementById('calfire-signature-pad');
+            if (installerCanvas && calfireCanvas) {
+                const installerSignaturePad = new SignaturePad(installerCanvas);
+                const calfireSignaturePad = new SignaturePad(calfireCanvas);
+            } else {
+                console.error("Canvas element not found!");
+            }
+        });
+    </script>
+    <script>
+        const installationTypeSelect = document.getElementById('installationType');
+        const deviceTableBody = document.getElementById('deviceTableBody');
+        const deviceDataInput = document.getElementById('device_data');
+
+        const allDevices = [
+            { Sku: 'mdt10', description: 'RMI Patriot 10" MDC', serial: '', asset: '' },
+            { Sku: 'mdt12', description: 'RMI Patriot 12" MDC', serial: '', asset: '' },
+            { Sku: 'PLA2', description: 'RMI Installation Plate A', serial: '' },
+            { Sku: 'PLB2', description: 'RMI Installation Plate B', serial: '' },
+            { Sku: 'RF930', description: 'RMI IQ Modem/Tait Radio', serial: '', asset: '' },
+            { Sku: 'R931', description: 'Cradlepoint IMEI No', serial: '', asset: '' },
+            { Sku: 'PSEC5', description: 'Parsec Antenna (5 in 1)', serial: '', asset: '' },
+            { Sku: 'PSEC7', description: 'Parsec Antenna (7 in 1)', serial: '', asset: '' },
+            { Sku: 'ORB61', description: 'Orbcomm ST6100 Serial No', serial: '', asset: '' },
+            { Sku: 'VFA1', description: 'VHF Radio Antenna', serial: '', asset: '' },
+            { Sku: 'PSC', description: 'PSC S Code', serial: '', asset: '' },
+            { Sku: 'HB12', description: 'RMI RMHB 12"', serial: '', asset: '' },
+            { Sku: 'HB15', description: 'RMI RMHB 15"', serial: '', asset: '' },
+            { Sku: 'EMRSW1', description: 'RMI EMER Button Kit', serial: '', asset: '' },
+        ];
+
+        const installationTypeMapping = {
+            type1: ['mdt10', 'PLA2', 'RF930', 'R931', 'PSEC5', 'PSEC7', 'ORB61', 'VFA1', 'PSC'],
+            type2: ['mdt12', 'HB12', 'PLA2', 'RF930', 'R931', 'PSEC5', 'PSEC7', 'ORB61', 'VFA1', 'PSC'],
+            type3: ['mdt10', 'R931', 'PSEC5', 'PSEC7', 'ORB61'],
+            type4: ['PLA2', 'R931', 'PSEC5', 'PSEC7', 'ORB61'],
+            type5: ['EMRSW1', 'ORB61']
+        };
+        const disabledAssetTags = [
+            'RMI Installation Plate A',
+            'RMI Installation Plate B',
+            'PSC S Code',
+            'VHF Radio Antenna',
+            'Parsec Antenna (5 in 1)',
+            'Parsec Antenna (7 in 1)',
+            'RMI EMER Button Kit',
+        ];
+
+        function togglePatriotSize(button) {
+            const row = button.closest('tr');
+            const itemCell = row.cells[1];
+            const descCell = row.cells[2];
+            if (button.textContent === '10"') {
+                button.textContent = '12"';
+                itemCell.textContent = 'mdt12';
+                descCell.textContent = 'RMI Patriot 12" MDC';
+            } else {
+                button.textContent = '10"';
+                itemCell.textContent = 'mdt10';
+                descCell.textContent = 'RMI Patriot 10" MDC';
+            }
+        }
+
+        function toggleRMHBSize(button) {
+            const row = button.closest('tr');
+            const itemCell = row.cells[1];
+            const descCell = row.cells[2];
+            if (button.textContent === '12"') {
+                button.textContent = '15"';
+                itemCell.textContent = 'HB15';
+                descCell.textContent = 'RMI RMHB 15"';
+            } else {
+                button.textContent = '12"';
+                itemCell.textContent = 'HB12';
+                descCell.textContent = 'RMI RMHB 12"';
+            }
+        }
+
+        function togglePlateType(button) {
+            const row = button.closest('tr');
+            const itemCell = row.cells[1];
+            const descCell = row.cells[2];
+            if (button.textContent === 'A') {
+                button.textContent = 'B';
+                itemCell.textContent = 'PLB2';
+                descCell.textContent = 'RMI Installation Plate B';
+            } else {
+                button.textContent = 'A';
+                itemCell.textContent = 'PLA2';
+                descCell.textContent = 'RMI Installation Plate A';
+            }
+        }
+
+        function updateForm() {
+            const selectedInstallationType = installationTypeSelect.value;
+            const deviceSkus = installationTypeMapping[selectedInstallationType];
+
+            if (!deviceSkus) {
+                deviceTableBody.innerHTML = '<tr><td colspan="6">No devices found for this installation type.</td></tr>';
+                return;
+            }
+
+            deviceTableBody.innerHTML = '';
+            const deviceData = [];
+
+            deviceSkus.forEach((sku, index) => {
+                const device = allDevices.find(device => device.Sku === sku);
+
+                let toggleButton = '';
+                if (sku === 'mdt10' || sku === 'mdt12') {
+                    toggleButton = `<button type="button" class="btn btn-secondary btn-sm" onclick="togglePatriotSize(this)" style="background-color: #007bff; color: #fff;">10"</button>`;
+                } else if (sku === 'HB12' || sku === 'HB15') {
+                    toggleButton = `<button type="button" class="btn btn-secondary btn-sm" onclick="toggleRMHBSize(this)" style="background-color: #007bff; color: #fff;">12"</button>`;
+                } else if (sku === 'PLA2' || sku === 'PLB2') {
+                    toggleButton = `<button type="button" class="btn btn-secondary btn-sm" onclick="togglePlateType(this)" style="background-color: #007bff; color: #fff;">A</button>`;
+                }
+
+                const disabledAttr = disabledAssetTags.includes(device.description) ? 'disabled' : '';
+                const assetTagValue = device.asset !== undefined ? device.asset : '';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${device.Sku}</td>
+                <td>${device.description}</td>
+                <td>${toggleButton}</td>
+                <td>
+                   ${device.checkbox !== undefined
+                        ? `<input type="checkbox" class="form-check-input custom-checkbox" name="${device.Sku}_installed" id="${device.Sku}_checkbox">`
+                        : `<input type="text" class="form-control" name="serial_number[]" value="${device.serial}" required>`}
+                 </td>
+                <td>
+                    <input type="text" class="form-control" name="asset_tag[]" value="${assetTagValue}" ${disabledAttr}>
+                 </td>
+                `;
+                deviceTableBody.appendChild(row);
+                deviceData.push({
+                    Sku: device.Sku,
+                    description: device.description,
+                    serial: device.serial,
+                    asset: assetTagValue
+                });
+
+            });
+            deviceDataInput.value = JSON.stringify(deviceData);
+        }
+
+        installationTypeSelect.addEventListener('change', updateForm);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateForm();
+        });
+
+        document.getElementById('equipmentForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            const deviceData = [];
+            deviceTableBody.querySelectorAll('tr').forEach(row => {
+                const sku = row.cells[1].innerText;
+                const description = row.cells[2].innerText;
+                const serial = row.querySelector('input[name="serial_number[]"]').value;
+                const asset = row.querySelector('input[name="asset_tag[]"]').value;
+
+                deviceData.push({
+                    Sku: sku,
+                    description: description,
+                    serial: serial,
+                    asset: asset
+                });
+            });
+            deviceDataInput.value = JSON.stringify(deviceData);
+
+            generatePDF();
+        });
+
+    </script>
+    <script>
+        // Prepopulate Date
+        const dateField = document.getElementById('date');
+        if (dateField) {
+            const today = new Date();
+            today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+            const localDate = today.toISOString().split('T')[0];
+            dateField.value = localDate;
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const installerCanvas = document.getElementById('installer-signature-pad');
+            const calfireCanvas = document.getElementById('calfire-signature-pad');
+            if (installerCanvas && calfireCanvas) {
+                const installerSignaturePad = new SignaturePad(installerCanvas);
+                const calfireSignaturePad = new SignaturePad(calfireCanvas);
+                document.getElementById('clear').addEventListener('click', function () {
+                    installerSignaturePad.clear();
+                    calfireSignaturePad.clear();
+                });
+            } else {
+                console.error("Canvas element not found!");
+            }
+        });
+
+    </script>
+    <script>
+        function generatePDF() {
+            const form = document.getElementById('equipmentForm');
+            const formData = new FormData(form);
+            const doc = new jspdf.jsPDF();
+
+            let yPos = 20;
+            const lineHeight = 10;
+
+
+            function addText(text, x, y, style = null) {
+                if (style) {
+                    doc.setFont(style.font, style.style);
+                    doc.setFontSize(style.size);
+                }
+                doc.text(text, x, y);
+                if (style) {
+                    doc.setFontSize(12);
+                }
+            }
+
+            function addTable(headers, data, x, y) {
+                let colWidth = 190 / headers.length;
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'bold');
+                doc.setFillColor(240, 240, 240); // light gray background
+
+                let headerY = y;
+                for (let i = 0; i < headers.length; i++) {
+                    doc.rect(x + colWidth * i, y, colWidth, lineHeight, 'F');
+                    doc.text(headers[i], x + colWidth * i + 2, y + lineHeight - 2);
+
+                }
+                doc.setFont('helvetica', 'normal');
+                doc.setFillColor(255, 255, 255);
+                let rowY = y + lineHeight;
+                data.forEach((row) => {
+                    for (let i = 0; i < headers.length; i++) {
+                        doc.rect(x + colWidth * i, rowY, colWidth, lineHeight, 'F');
+                        doc.text(String(row[i]) || '', x + colWidth * i + 2, rowY + lineHeight - 2);
+                    }
+                    rowY += lineHeight;
+
+                });
+                doc.setFontSize(12);
+                return rowY; // Return the y-position of the next available line after the table
+            }
+
+
+            addText('Equipment Installation Form', 10, yPos, { font: 'helvetica', style: 'bold', size: 16 });
+            yPos += lineHeight * 1.5;
+
+
+            addText('Date: ' + formData.get('date'), 10, yPos);
+            yPos += lineHeight;
+
+
+            const generalInfo = [
+                ['Radio Number', 'Unit Code', 'X Number'],
+                [formData.get('radio_number'), formData.get('cal_fire_unit_code'), formData.get('x_number')],
+                ['Radio Mobile MID', 'License Plate', 'Mileage'],
+                [formData.get('radio_mobile_mid'), formData.get('license_plate'), formData.get('mileage')],
+                ['Make', 'Model', ''],
+                [formData.get('make'), formData.get('model'), '']
+            ];
+
+            yPos = addTable(['', '', ''], generalInfo, 10, yPos);
+
+
+            addText('Installation Type: ' + formData.get('installationType'), 10, yPos);
+            yPos += lineHeight;
+            addText('Was this equipment an AVL 1.0?: ' + formData.get('avl1_check'), 10, yPos);
+            yPos += lineHeight;
+            addText('Previously Installed Equipment: ' + formData.get('previously_installed'), 10, yPos);
+            yPos += lineHeight;
+            addText('System Test and Approval: ' + formData.get('system_test'), 10, yPos);
+            yPos += lineHeight * 1.5;
+
+
+
+            const deviceData = JSON.parse(formData.get('device_data') || '[]');
+            if (deviceData && deviceData.length > 0) {
+                addText('Devices', 10, yPos, { font: 'helvetica', style: 'bold', size: 14 });
+                yPos += lineHeight;
+                const deviceHeaders = ['#', 'Description', 'Serial Number', 'Asset Tag'];
+                const deviceTableData = deviceData.map((device, index) => [index + 1, device.description, device.serial, device.asset]);
+                yPos = addTable(deviceHeaders, deviceTableData, 10, yPos);
+                yPos += lineHeight * 1.5
+            } else {
+                addText('No devices found.', 10, yPos);
+                yPos += lineHeight * 1.5;
+
+            }
+            const installerSignatureData = document.getElementById('installer-signature-pad').toDataURL();
+            const calfireSignatureData = document.getElementById('calfire-signature-pad').toDataURL();
+
+            doc.setFont('helvetica', 'bold');
+            addText('Signatures', 10, yPos, { font: 'helvetica', style: 'bold', size: 14 });
+            yPos += lineHeight;
+            doc.setFont('helvetica', 'normal');
+
+            const signatureY = yPos + lineHeight;
+
+            if (installerSignatureData) {
+                doc.addImage(installerSignatureData, 'PNG', 10, signatureY, 50, 25);
+                addText('Installer: ' + formData.get('installer_name'), 10, signatureY + 30)
+            }
+            if (calfireSignatureData) {
+                doc.addImage(calfireSignatureData, 'PNG', 110, signatureY, 50, 25);
+                addText('CalFire Officer: ' + formData.get('calfire_officer_name'), 110, signatureY + 30);
+
+            }
+
+            doc.save('installation_form.pdf');
+        }
+    </script>
+</body>
+
+</html>
