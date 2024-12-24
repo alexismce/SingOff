@@ -1,11 +1,12 @@
 <?php
 session_start();
-// Assuming login credentials are correct
+// Assuming login credentials are verified
 $_SESSION['logged_in'] = true;
-// Redirect to index.php
+// Redirect to the main page
 header("Location: index.php");
 exit();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
