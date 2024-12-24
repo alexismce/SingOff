@@ -1,12 +1,12 @@
 <?php
 session_start();
-
-// Redirect to the main page if already logged in
-if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-    header("Location: index.php");
-    exit();
-}
+// Assuming login credentials are correct
+$_SESSION['logged_in'] = true;
+// Redirect to index.php
+header("Location: index.php");
+exit();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
