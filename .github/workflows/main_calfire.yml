@@ -1,5 +1,9 @@
 name: SignOff Project CI/CD
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
   push:
     branches:
@@ -69,22 +73,4 @@ jobs:
       run: composer install --prefer-dist --no-progress --no-suggest
 
     - name: Login to Azure
-      uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_9BF57F380EE54C41AA0997690F89B00A }}
-        tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F86C75918ACC43459341686770FE8C91 }}
-        subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CE366596001E498BA2FFB6A09C25B91C }}
-
-    - name: 'Deploy to Azure Web App'
-      uses: azure/webapps-deploy@v3
-      id: deploy-to-webapp
-      with:
-        app-name: 'radiocontrol'
-        slot-name: 'Production'
-        package: .
-
-    - name: Restart Azure Web App
-      uses: azure/CLI@v1
-      with:
-        inlineScript: |
-          az webapp restart --name 'calfire' --resource-group 'calfire_group'
+      uses: azure
