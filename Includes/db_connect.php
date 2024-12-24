@@ -1,11 +1,15 @@
 <?php
-$servername = getenv('DB_SERVERNAME');
-$dbusername = getenv('DB_USERNAME');
-$dbpassword = getenv('DB_PASSWORD');
-$dbname = getenv('DB_NAME');
+$servername = "calfi-server.mysql.database.azure.com";
+$username = "your_username";
+$password = "Giselle4me520@@";
+$dbname = "calfi-database";
 
-$conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+echo "Connected successfully";
 ?>
