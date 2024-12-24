@@ -1,6 +1,6 @@
 <?php
 $servername = "calfi-server.mysql.database.azure.com";
-$username = "your_username";
+$username = "alexismce";
 $password = "Giselle4me520@@";
 $dbname = "calfi-database";
 
