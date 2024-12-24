@@ -1,11 +1,11 @@
 <?php
 session_start();
-// Assuming login credentials are correct
-$_SESSION['logged_in'] = true;
-// Redirect to index.php
-header("Location: index.php");
+session_unset();
+session_destroy();
+header("Location: login.php"); // Redirect to login page after sign off
 exit();
 ?>
+
 
 
 <!DOCTYPE html>
